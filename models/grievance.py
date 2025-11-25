@@ -6,9 +6,11 @@ from database import Base
 class Grievance(Base):
     __tablename__ = "grievance"
 
+    # grievance_id = Column(Integer, primary_key=True, index=True)
+    # citizen_id = Column(Integer, ForeignKey("citizen.citizen_id"), nullable=False)
     grievance_id = Column(Integer, primary_key=True, index=True)
     citizen_id = Column(Integer, ForeignKey("citizen.citizen_id"), nullable=False)
-    officer_id = Column(Integer, ForeignKey("officer.officer_id"))
+    officer_id = Column(Integer, ForeignKey("officer.officer_id"), nullable=True)
 
     source_system = Column(String(50))
     language = Column(String(50))

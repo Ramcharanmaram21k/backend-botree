@@ -20,6 +20,7 @@ class Officer(Base):
     # category_expertise = Column(String(100))
     # department = Column(String(100))
     #city = Column(String(100))
+    pin_code = Column(String(20))
     district = Column(String(100))
     mandal = Column(String(100))
     village_ward = Column(String(100))

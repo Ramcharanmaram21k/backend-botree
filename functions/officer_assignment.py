@@ -30,6 +30,7 @@
 
 # botree1/functions/officer_assignment.py
 from models.officer import Officer
+from sqlalchemy import func
 
 
 class OfficerAssignment:
@@ -43,15 +44,29 @@ class OfficerAssignment:
         4. Load balancing: lowest current_load first
         """
 
+        available = db.query(Officer).all()
+        for o in available:
+            print("OFFICER:", o.name, o.category_expertise, o.district, o.mandal, o.village_ward)
+        print("Searching for officer with:", category, district, mandal, village_ward)
+
+
         # Level 1: Exact match - village_ward + mandal + district + category
         if village_ward and mandal and district:
             officer = (
                 db.query(Officer)
+                # .filter(
+                #     Officer.category_expertise == category,
+                #     Officer.village_ward == village_ward,
+                #     Officer.mandal == mandal,
+                #     Officer.district == district,
+                #     Officer.is_active == True,
+                #     Officer.current_load < Officer.max_load
+                # )
                 .filter(
-                    Officer.category_expertise == category,
-                    Officer.village_ward == village_ward,
-                    Officer.mandal == mandal,
-                    Officer.district == district,
+                    func.lower(Officer.category_expertise) == category.lower(),
+                    func.lower(Officer.village_ward) == village_ward.lower(),
+                    func.lower(Officer.mandal) == mandal.lower(),
+                    func.lower(Officer.district) == district.lower(),
                     Officer.is_active == True,
                     Officer.current_load < Officer.max_load
                 )
@@ -105,5 +120,4 @@ class OfficerAssignment:
             .order_by(Officer.current_load.asc())
             .first()
         )
-
         return officer
