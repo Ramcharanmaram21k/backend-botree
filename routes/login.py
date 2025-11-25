@@ -1,4 +1,4 @@
-# fast_api_project/routers/login.py
+#botree/routers/login.py
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from schemas.login import LoginCreate, LoginRequest, LoginResponse
@@ -42,17 +42,39 @@ def register_user(data: RegisterModel, db: Session = Depends(get_db)):
 
 
 # ------------------- LOGIN -------------------
+# @login_router.post("/login", response_model=LoginResponse)
+# def login(email: str, password: str, db: Session = Depends(get_db)):
+#     user = db.query(Login).filter(Login.email == email).first()
+
+#     if not user:
+#         return {"msg": "Invalid email or password", "email": email, "role":user.role}
+
+#     safe_password = password[:72]
+
+#     if not bcrypt.checkpw(safe_password.encode('utf-8'), user.password.encode('utf-8')):
+#         return {"msg": "Invalid email or password", "email": email, "role":user.role}
+
+#     return {"msg": "Login successful", "email": user.email, "role":user.role}
+
+
+# botree1/routers/login.py
+
 @login_router.post("/login", response_model=LoginResponse)
 def login(email: str, password: str, db: Session = Depends(get_db)):
     user = db.query(Login).filter(Login.email == email).first()
+    officer = db.query(RegisterModel).filter(RegisterModel.email == email).first()
 
     if not user:
-        return {"msg": "Invalid email or password", "email": email, "role":user.role}
+        raise HTTPException(status_code=401, detail="Invalid credentials")
 
     safe_password = password[:72]
-
     if not bcrypt.checkpw(safe_password.encode('utf-8'), user.password.encode('utf-8')):
-        return {"msg": "Invalid email or password", "email": email, "role":user.role}
+        raise HTTPException(status_code=401, detail="Invalid credentials")
 
-    return {"msg": "Login successful", "email": user.email, "role":user.role}
+    return {
+        "msg": "Login successful",
+        "email": user.email,
+        "role": user.role,
+        "officer_id": officer.id if officer else None
+    }
 

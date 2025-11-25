@@ -1,4 +1,4 @@
-
+# schemas/login.py
 from pydantic import BaseModel, EmailStr, constr, StringConstraints
 from typing import Annotated
 

@@ -1,3 +1,4 @@
+#botree1/models/grievance.py
 from sqlalchemy import Column, Integer, String, Text, Float, ForeignKey
 from database import Base
 
@@ -7,6 +8,7 @@ class Grievance(Base):
 
     grievance_id = Column(Integer, primary_key=True, index=True)
     citizen_id = Column(Integer, ForeignKey("citizen.citizen_id"), nullable=False)
+    officer_id = Column(Integer, ForeignKey("officer.officer_id"))
 
     source_system = Column(String(50))
     language = Column(String(50))

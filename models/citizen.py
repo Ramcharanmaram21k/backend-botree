@@ -1,3 +1,4 @@
+#botree1/models/citizen.py
 from sqlalchemy import Column, Integer, String,Text
 from database import Base
 

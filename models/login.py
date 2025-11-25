@@ -1,4 +1,4 @@
-# fast_api_project/models/login.py
+# botree1/models/login.py
 from sqlalchemy import Column, Integer, String
 from database import Base
 
