@@ -1,3 +1,14 @@
+#from fastapi import FastAPI
+
+# This variable 'app' is what uvicorn looks for
+app = FastAPI()
+
+#@app.get("/")
+#def read_root():
+#    return {"message": "Hello World"}
+
+
+
 # from fastapi import FastAPI, HTTPException, Path, status
 # from pydantic import BaseModel
 # from typing import Optional
