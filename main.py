@@ -33,7 +33,11 @@ origins = [
     "http://127.0.0.1:3000",
     "http://127.0.0.1:5173",
     "https://admin-officer-botree.vercel.app",
-    "https://bo-tree-citizens.vercel.app"
+    "https://bo-tree-citizens.vercel.app",
+
+    "https://bo-tree-citizens-git-main-ramcharans-projects-90b10c9a.vercel.app",
+
+    "https://bo-tree-citizens-ramcharans-projects-90b10c9a.vercel.app"
 ]
 
 app.add_middleware(
