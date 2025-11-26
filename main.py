@@ -1,4 +1,4 @@
-import os  # <--- 1. Import OS to handle folder creation
+import os
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
@@ -18,22 +18,20 @@ from database import Base, engine
 
 app = FastAPI()
 
-# 2. AUTO-CREATE UPLOADS FOLDER
-# This ensures the folder exists before we try to mount it.
-# Even when deployed, this will create the storage space for citizen files.
-if not os.path.exists("uploads"):
-    os.makedirs("uploads")
+# --- VERCEL FIX: USE TMP FOLDER ---
+UPLOAD_DIR = "/tmp/uploads"
 
-# 3. MOUNT STATIC FILES
-# Now this is safe because we just created the folder above.
-app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+if not os.path.exists(UPLOAD_DIR):
+    os.makedirs(UPLOAD_DIR, exist_ok=True)
+
+# Mount the temporary directory
+app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 
 origins = [
     "http://localhost:3000",
     "http://localhost:5173",
     "http://127.0.0.1:3000",
     "http://127.0.0.1:5173",
-    # Add your deployed frontend domains here (No trailing slashes!)
     "https://admin-officer-botree.vercel.app",
     "https://bo-tree-citizens.vercel.app"
 ]
@@ -45,9 +43,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 Base.metadata.create_all(bind=engine)
 
-# Include Routers
 app.include_router(submit_router)
 app.include_router(login_router)
 app.include_router(officer_router)

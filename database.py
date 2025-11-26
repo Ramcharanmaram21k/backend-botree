@@ -1,9 +1,13 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 
-DATABASE_URL = "mysql+pymysql://root:root@localhost:3306/grievance_system"
+# --- VERCEL FIX: DATABASE IN TMP ---
+SQLALCHEMY_DATABASE_URL = "sqlite:////tmp/sql_app.db"
 
-engine = create_engine(DATABASE_URL, echo=False)
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
+)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
